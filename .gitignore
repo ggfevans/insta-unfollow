@@ -1,0 +1,16 @@
+# Ship ONLY the tool. Personal data (your export, candidates, queues) stays local.
+# Allowlist style: ignore everything, then re-include the files that make up the tool.
+*
+!.gitignore
+!LICENSE
+!README.md
+!DISCLAIMER.md
+!docs/
+!docs/**
+!insta_unfollow.py
+!test_insta_unfollow.py
+!build_queue.py
+!test_build_queue.py
+!unfollow.js
+!unfollow_queue.example.js
+!diag.js
