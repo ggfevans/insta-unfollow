@@ -7,9 +7,7 @@ and this project uses [Calendar Versioning](https://calver.org/) (`YY.MM.MICRO`)
 
 ## [Unreleased]
 
-### Changed
-- Streamlined the README: removed repetition, consolidated the safety warning to
-  one notice, and condensed the smaller sections.
+_Nothing yet._
 
 ## [26.6.2] - 2026-06-14
 

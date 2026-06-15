@@ -7,6 +7,9 @@ ever leaving your machine. Instagram has no bulk-unfollow by design, a
 [dark pattern](https://deceptive.design/) that keeps your following list sticky;
 this hands that control back.
 
+These are loose, minimal scripts for a personal one-off cleanup, not a polished or
+supported product. Read them, and expect to tweak them.
+
 Two stages, and the separation *is* the safety model:
 
 1. **`insta_unfollow.py`** (offline analyser): read-only, no network, no login,
