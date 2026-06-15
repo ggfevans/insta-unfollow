@@ -7,6 +7,10 @@ and this project uses [Calendar Versioning](https://calver.org/) (`YY.MM.MICRO`)
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [26.6.2] - 2026-06-14
+
 ### Security
 - Pin GitHub Actions to full commit SHAs (`actions/checkout`,
   `actions/setup-python`) instead of mutable tags, so a moved tag cannot silently
@@ -52,6 +56,7 @@ browser-console unfollower.
 - Documentation: `README.md`, `DISCLAIMER.md` (Instagram ToS, account risk,
   as-is / no-warranty), and an MIT `LICENSE`.
 
-[Unreleased]: https://github.com/ggfevans/insta-unfollow/compare/v26.6.1...HEAD
+[Unreleased]: https://github.com/ggfevans/insta-unfollow/compare/v26.6.2...HEAD
+[26.6.2]: https://github.com/ggfevans/insta-unfollow/compare/v26.6.1...v26.6.2
 [26.6.1]: https://github.com/ggfevans/insta-unfollow/compare/v26.6.0...v26.6.1
 [26.6.0]: https://github.com/ggfevans/insta-unfollow/releases/tag/v26.6.0
