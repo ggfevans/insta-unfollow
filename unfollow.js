@@ -149,6 +149,14 @@
     return "continue";
   }
 
+  // Robust scroll + lazy-load handling. Instagram's Following modal loads in
+  // chunks; scrollTop stops advancing while the next chunk is still fetching, and
+  // a fast run (lots of free-skips on resume) can outrun the loader. We treat
+  // "stuck" as neither scroll position NOR row count growing — and before giving
+  // up we nudge the list (up two viewports, back to the bottom) to re-trigger
+  // loading and wait a longer beat. Only stop after several real no-growth rounds.
+  const rowCount = (d) => (d ? d.querySelectorAll('a[href^="/"]').length : 0);
+  const STALE_LIMIT = 8;
   let stale = 0;
   while (true) {
     const result = await processVisibleRows();
@@ -156,15 +164,37 @@
     if (result === "blocked" || result === "stop") break;
 
     const dialog = getDialog();
+    if (!dialog) { console.warn("⚠ Following dialog closed — stopping."); break; }
     const scroller = getScroller(dialog);
-    const before = scroller.scrollTop;
+    const beforeTop = scroller.scrollTop;
+    const beforeRows = rowCount(dialog);
+
     scroller.scrollTop = scroller.scrollHeight;
     await sleep(CONFIG.scrollPauseMs + rand(0, 800));
-    if (scroller.scrollTop <= before) {
-      stale++;
-      if (stale > 3) { console.log("🏁 Reached end of the following list."); break; }
-    } else {
+
+    let grew = scroller.scrollTop > beforeTop || rowCount(dialog) > beforeRows;
+    if (!grew) {
+      // Re-arm Instagram's lazy loader, then give it more time to fetch.
+      scroller.scrollTop = Math.max(0, scroller.scrollHeight - scroller.clientHeight * 2);
+      await sleep(700);
+      scroller.scrollTop = scroller.scrollHeight;
+      await sleep(CONFIG.scrollPauseMs + rand(600, 1400));
+      grew = scroller.scrollTop > beforeTop || rowCount(dialog) > beforeRows;
+    }
+
+    if (grew) {
       stale = 0;
+    } else if (++stale > STALE_LIMIT) {
+      console.log(
+        `🏁 Instagram stopped loading more rows after ${stale} tries. If your ` +
+          `Following list is actually longer, this is usually Instagram throttling ` +
+          `the list — not the true end. Scroll the dialog by hand to confirm more ` +
+          `load (wait a minute if needed), then re-paste this script to continue; ` +
+          `already-done accounts are skipped.`
+      );
+      break;
+    } else {
+      console.log(`… list not growing (${stale}/${STALE_LIMIT}) — giving Instagram time to load more`);
     }
   }
 
