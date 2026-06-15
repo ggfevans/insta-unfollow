@@ -129,6 +129,13 @@ it yourself before running it, especially `unfollow.js`, which acts on your live
 account. It is provided as-is; see [LICENSE](LICENSE) and
 [DISCLAIMER.md](DISCLAIMER.md).
 
+## Versioning
+
+This project uses [Calendar Versioning](https://calver.org/) (CalVer) in the form
+`YY.MM.MICRO`, so `26.6.0` is the first release of June 2026. There's no
+semantic-versioning contract here; the date tells you how fresh a release is,
+which is what matters for a tool that chases Instagram's ever-changing UI.
+
 ## Licence
 
 MIT. See [LICENSE](LICENSE).
