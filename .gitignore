@@ -7,6 +7,8 @@
 !DISCLAIMER.md
 !docs/
 !docs/**
+!.github/
+!.github/**
 !insta_unfollow.py
 !test_insta_unfollow.py
 !build_queue.py
