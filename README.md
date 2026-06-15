@@ -4,6 +4,10 @@ Offline tooling to find — and then actually unfollow — the Instagram account
 you no longer want to follow, **without handing your password to any third-party
 service**.
 
+Instagram offers no bulk-unfollow and makes you do it one tap at a time —
+friction by design, a [dark pattern](https://deceptive.design/) that keeps your
+following count nice and sticky. This tool hands that control back to you.
+
 It works in two clearly separated stages, and that separation *is* the safety
 model:
 
@@ -61,6 +65,12 @@ model:
 
 ## Pacing & safety
 
+> ⚠️ **Automating actions breaks Instagram's Terms of Service and can get your
+> account temporarily action-blocked, feature-restricted, or — in the worst
+> case — permanently suspended or banned. This software is provided as-is, with
+> no warranty; you use `unfollow.js` entirely at your own risk.** See
+> [DISCLAIMER.md](DISCLAIMER.md).
+
 `unfollow.js` defaults to a conservative per-session cap with randomised,
 human-speed delays, and it **stops immediately** if Instagram shows an
 action-block. Start small, ramp up over days only if you see no blocks, and read
@@ -89,6 +99,14 @@ git-ignored and never leaves your machine.
 pip install pytest
 python -m pytest -q
 ```
+
+## AI disclosure
+
+This project was built with substantial AI assistance (Anthropic's Claude, via
+Claude Code) alongside human review. As with any code — AI-assisted or not —
+read it yourself before running it, especially `unfollow.js`, which acts on your
+live account. It is provided as-is; see [LICENSE](LICENSE) and
+[DISCLAIMER.md](DISCLAIMER.md).
 
 ## Licence
 
