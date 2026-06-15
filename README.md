@@ -1,5 +1,7 @@
 # insta-unfollow
 
+[![CI](https://github.com/ggfevans/insta-unfollow/actions/workflows/ci.yml/badge.svg)](https://github.com/ggfevans/insta-unfollow/actions/workflows/ci.yml)
+
 Offline tooling to find, and then actually unfollow, the Instagram accounts
 you no longer want to follow, **without handing your password to any third-party
 service**.
