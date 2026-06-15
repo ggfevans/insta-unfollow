@@ -15,6 +15,10 @@
  *   6. It runs in DRY RUN first — it only LOGS who it would unfollow. Verify the
  *      handles look right. Then set  CONFIG.dryRun = false  (edit below) and
  *      paste again to actually unfollow.
+ *   7. RESUME: progress is saved in your browser (localStorage). Re-paste both
+ *      files on later days and it skips everyone already unfollowed, advancing
+ *      ~one cap deeper each session. Set CONFIG.reset = true for one run to
+ *      wipe saved progress and start over.
  *
  * Selectors: Instagram changes its markup often. This script finds buttons by
  * their TEXT ("Following" / "Unfollow"), which is more durable than class names,
@@ -28,6 +32,7 @@
     maxDelay: 7000,    // max ms between unfollows
     scrollPauseMs: 1800,
     dryRun: false,     // LIVE — this will actually unfollow. Set true to re-test.
+    reset: false,      // set true for ONE run to wipe saved progress and start over.
   };
 
   const norm = (s) => (s || "").toLowerCase().trim();
@@ -39,7 +44,29 @@
     console.error("❌ No targets. Paste unfollow_queue.js first.");
     return;
   }
-  console.log(`▶ ${targets.size} targets loaded. dryRun=${CONFIG.dryRun}, cap=${CONFIG.cap}`);
+  // ---- Resume across runs: completed handles persist in localStorage ----
+  const STORE_KEY = "iu_unfollowed_v1";
+  const loadDone = () => {
+    try {
+      return new Set(JSON.parse(localStorage.getItem(STORE_KEY) || "[]"));
+    } catch {
+      console.warn("⚠ localStorage unavailable — progress won't persist this run.");
+      return new Set();
+    }
+  };
+  const saveDone = (set) => {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify([...set])); } catch {}
+  };
+  if (CONFIG.reset) {
+    try { localStorage.removeItem(STORE_KEY); } catch {}
+    console.log("↺ Stored progress cleared (CONFIG.reset). Set it back to false next run.");
+  }
+  const done = loadDone(); // handles already unfollowed in previous sessions
+  const remaining = [...targets].filter((t) => !done.has(t)).length;
+  console.log(
+    `▶ ${targets.size} targets · ${done.size} done · ${remaining} remaining · ` +
+      `dryRun=${CONFIG.dryRun} · cap=${CONFIG.cap}`
+  );
 
   const getDialog = () => document.querySelector('div[role="dialog"]');
   function getScroller(dialog) {
@@ -72,7 +99,7 @@
     );
   }
 
-  const done = new Set();
+  const attempted = new Set(); // guards re-processing within THIS run (incl. dry run)
   let count = 0;
 
   async function processVisibleRows() {
@@ -87,13 +114,15 @@
     for (const btn of rowButtons) {
       if (count >= CONFIG.cap) return "cap";
       const handle = handleForButton(btn);
-      if (!handle || done.has(handle) || !targets.has(handle)) continue;
+      // Skip non-targets, anything done in a previous run (free skip — no click,
+      // no cap cost), and anything already handled this run.
+      if (!handle || !targets.has(handle) || done.has(handle) || attempted.has(handle)) continue;
+      attempted.add(handle);
 
-      done.add(handle);
       if (CONFIG.dryRun) {
         count++;
         console.log(`[dry] #${count} would unfollow @${handle}`);
-        continue;
+        continue; // dry run never persists — it must not poison real progress
       }
 
       btn.scrollIntoView({ block: "center" });
@@ -106,6 +135,8 @@
         continue;
       }
       confirm.click();
+      done.add(handle);
+      saveDone(done); // persist only real unfollows, immediately
       count++;
       console.log(`✓ #${count} unfollowed @${handle}`);
 
