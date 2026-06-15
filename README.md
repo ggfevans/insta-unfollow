@@ -46,8 +46,9 @@ There's a longer, rantier write-up of the story on my site:
 
 - Python 3.9+ (standard library only, nothing to install to *run* it)
 - A desktop browser logged into Instagram (Chrome, Firefox, or Edge)
-- Your Instagram data export: Instagram → *Settings* → *Your activity* →
-  *Download your information* (choose **JSON** if offered)
+- Your Instagram data export, requested via Instagram's
+  [Download your information](https://privacycenter.instagram.com/guide/dyi/?entry_point=privacy_center_home)
+  tool (choose **JSON** if offered)
 
 ## Workflow
 
@@ -135,6 +136,8 @@ This project uses [Calendar Versioning](https://calver.org/) (CalVer) in the for
 `YY.MM.MICRO`, so `26.6.0` is the first release of June 2026. There's no
 semantic-versioning contract here; the date tells you how fresh a release is,
 which is what matters for a tool that chases Instagram's ever-changing UI.
+
+See [CHANGELOG.md](CHANGELOG.md) for the release history.
 
 ## Licence
 
